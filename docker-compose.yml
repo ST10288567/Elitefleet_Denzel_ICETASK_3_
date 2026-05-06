@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  elite-fleet-api:
+    build: ./mock-api
+    container_name: elite-fleet-api
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
