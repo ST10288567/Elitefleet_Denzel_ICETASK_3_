@@ -37,7 +37,10 @@ import com.example.elitefleetmanagement.ui.theme.FleetTextGrey
 @Composable
 fun DashboardScreen(
     onInventoryClick: () -> Unit,
-    onBookingsClick: () -> Unit
+    onBookingsClick: () -> Unit,
+    onClaimsClick: () -> Unit,
+    onReportsClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -48,27 +51,31 @@ fun DashboardScreen(
                     icon = { Icon(Icons.Rounded.DirectionsCar, null) },
                     label = { Text("Home") }
                 )
+
                 NavigationBarItem(
                     selected = false,
-                    onClick = {},
+                    onClick = onBookingsClick,
                     icon = { Icon(Icons.Rounded.CalendarMonth, null) },
                     label = { Text("Bookings") }
                 )
+
                 NavigationBarItem(
                     selected = false,
-                    onClick = {},
+                    onClick = onClaimsClick,
                     icon = { Icon(Icons.Rounded.Assignment, null) },
                     label = { Text("Claims") }
                 )
+
                 NavigationBarItem(
                     selected = false,
-                    onClick = {},
+                    onClick = onProfileClick,
                     icon = { Icon(Icons.Rounded.Person, null) },
                     label = { Text("Profile") }
                 )
             }
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,14 +104,16 @@ fun DashboardScreen(
                     title = "Vehicles",
                     value = "24",
                     icon = Icons.Rounded.DirectionsCar,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onClick = onInventoryClick
                 )
 
                 DashboardStatCard(
                     title = "Bookings",
                     value = "12",
                     icon = Icons.Rounded.CalendarMonth,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onClick = onBookingsClick
                 )
             }
 
@@ -118,14 +127,16 @@ fun DashboardScreen(
                     title = "Claims",
                     value = "5",
                     icon = Icons.Rounded.Assignment,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onClick = onClaimsClick
                 )
 
                 DashboardStatCard(
                     title = "Reports",
                     value = "8",
                     icon = Icons.Rounded.BarChart,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onClick = onReportsClick
                 )
             }
 
@@ -140,13 +151,30 @@ fun DashboardScreen(
                 description = "Manage vehicle listings, availability and details.",
                 onClick = onInventoryClick
             )
+
             ModuleCard(
                 title = "Appointment Booking",
                 description = "Book vehicle viewings and assign consultants.",
                 onClick = onBookingsClick
             )
-            ModuleCard("Claims Workflow", "Review customer claims and track claim status.")
-            ModuleCard("Reports", "View dealership insights and export summaries.")
+
+            ModuleCard(
+                title = "Claims Workflow",
+                description = "Review customer claims and track claim status.",
+                onClick = onClaimsClick
+            )
+
+            ModuleCard(
+                title = "Reports",
+                description = "View dealership insights and export summaries.",
+                onClick = onReportsClick
+            )
+
+            ModuleCard(
+                title = "Profile",
+                description = "View administrator details and system settings.",
+                onClick = onProfileClick
+            )
         }
     }
 }
@@ -156,9 +184,11 @@ private fun DashboardStatCard(
     title: String,
     value: String,
     icon: ImageVector,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(4.dp)
@@ -192,7 +222,7 @@ private fun DashboardStatCard(
 private fun ModuleCard(
     title: String,
     description: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Card(
         onClick = onClick,

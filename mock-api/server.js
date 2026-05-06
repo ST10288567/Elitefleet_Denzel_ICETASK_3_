@@ -2,8 +2,13 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+
+/* =========================
+   VEHICLES DATA
+========================= */
 
 let vehicles = [
   {
@@ -48,6 +53,10 @@ let vehicles = [
   }
 ];
 
+/* =========================
+   BOOKINGS DATA
+========================= */
+
 let bookings = [
   {
     id: 1,
@@ -71,7 +80,11 @@ let bookings = [
   }
 ];
 
-const claims = [
+/* =========================
+   CLAIMS DATA
+========================= */
+
+let claims = [
   {
     id: 1,
     title: "Vehicle deposit refund",
@@ -79,10 +92,21 @@ const claims = [
     amount: 2500,
     status: "Pending",
     date: "2026-05-05"
+  },
+  {
+    id: 2,
+    title: "Warranty claim",
+    customerName: "K. Naidoo",
+    amount: 8500,
+    status: "Approved",
+    date: "2026-05-06"
   }
 ];
 
-// LOGIN
+/* =========================
+   LOGIN API
+========================= */
+
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -102,16 +126,23 @@ app.post("/login", (req, res) => {
   });
 });
 
-// VEHICLES CRUD
+/* =========================
+   VEHICLES CRUD
+========================= */
+
 app.get("/vehicles", (req, res) => {
   res.json(vehicles);
 });
 
 app.get("/vehicles/:id", (req, res) => {
-  const vehicle = vehicles.find(v => v.id === Number(req.params.id));
+  const vehicle = vehicles.find(
+    v => v.id === Number(req.params.id)
+  );
 
   if (!vehicle) {
-    return res.status(404).json({ message: "Vehicle not found" });
+    return res.status(404).json({
+      message: "Vehicle not found"
+    });
   }
 
   res.json(vehicle);
@@ -124,15 +155,21 @@ app.post("/vehicles", (req, res) => {
   };
 
   vehicles.push(newVehicle);
+
   res.status(201).json(newVehicle);
 });
 
 app.put("/vehicles/:id", (req, res) => {
   const vehicleId = Number(req.params.id);
-  const index = vehicles.findIndex(v => v.id === vehicleId);
+
+  const index = vehicles.findIndex(
+    v => v.id === vehicleId
+  );
 
   if (index === -1) {
-    return res.status(404).json({ message: "Vehicle not found" });
+    return res.status(404).json({
+      message: "Vehicle not found"
+    });
   }
 
   vehicles[index] = {
@@ -145,21 +182,33 @@ app.put("/vehicles/:id", (req, res) => {
 
 app.delete("/vehicles/:id", (req, res) => {
   const vehicleId = Number(req.params.id);
-  vehicles = vehicles.filter(v => v.id !== vehicleId);
 
-  res.json({ message: "Vehicle deleted successfully" });
+  vehicles = vehicles.filter(
+    v => v.id !== vehicleId
+  );
+
+  res.json({
+    message: "Vehicle deleted successfully"
+  });
 });
 
-// BOOKINGS CRUD
+/* =========================
+   BOOKINGS CRUD
+========================= */
+
 app.get("/bookings", (req, res) => {
   res.json(bookings);
 });
 
 app.get("/bookings/:id", (req, res) => {
-  const booking = bookings.find(b => b.id === Number(req.params.id));
+  const booking = bookings.find(
+    b => b.id === Number(req.params.id)
+  );
 
   if (!booking) {
-    return res.status(404).json({ message: "Booking not found" });
+    return res.status(404).json({
+      message: "Booking not found"
+    });
   }
 
   res.json(booking);
@@ -172,15 +221,21 @@ app.post("/bookings", (req, res) => {
   };
 
   bookings.push(newBooking);
+
   res.status(201).json(newBooking);
 });
 
 app.put("/bookings/:id", (req, res) => {
   const bookingId = Number(req.params.id);
-  const index = bookings.findIndex(b => b.id === bookingId);
+
+  const index = bookings.findIndex(
+    b => b.id === bookingId
+  );
 
   if (index === -1) {
-    return res.status(404).json({ message: "Booking not found" });
+    return res.status(404).json({
+      message: "Booking not found"
+    });
   }
 
   bookings[index] = {
@@ -193,16 +248,51 @@ app.put("/bookings/:id", (req, res) => {
 
 app.delete("/bookings/:id", (req, res) => {
   const bookingId = Number(req.params.id);
-  bookings = bookings.filter(b => b.id !== bookingId);
 
-  res.json({ message: "Booking deleted successfully" });
+  bookings = bookings.filter(
+    b => b.id !== bookingId
+  );
+
+  res.json({
+    message: "Booking deleted successfully"
+  });
 });
 
-// CLAIMS
+/* =========================
+   CLAIMS CRUD
+========================= */
+
 app.get("/claims", (req, res) => {
   res.json(claims);
 });
 
+app.put("/claims/:id", (req, res) => {
+  const claimId = Number(req.params.id);
+
+  const index = claims.findIndex(
+    c => c.id === claimId
+  );
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Claim not found"
+    });
+  }
+
+  claims[index] = {
+    id: claimId,
+    ...req.body
+  };
+
+  res.json(claims[index]);
+});
+
+/* =========================
+   START SERVER
+========================= */
+
 app.listen(3000, () => {
-  console.log("Elite Fleet API running on http://localhost:3000");
+  console.log(
+    "Elite Fleet API running on http://localhost:3000"
+  );
 });

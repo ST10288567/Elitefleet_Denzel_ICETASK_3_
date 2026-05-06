@@ -55,4 +55,8 @@ class FleetRepository(
     suspend fun getClaims(): List<Claim> {
         return api.getClaims()
     }
+
+    suspend fun updateClaim(id: Int, claim: Claim): Claim {
+        return api.updateClaim(id, claim)
+    }
 }

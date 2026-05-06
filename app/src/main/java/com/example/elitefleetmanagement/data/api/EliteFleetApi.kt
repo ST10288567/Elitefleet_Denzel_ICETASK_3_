@@ -73,4 +73,10 @@ interface EliteFleetApi {
     // CLAIMS
     @GET("claims")
     suspend fun getClaims(): List<Claim>
+
+    @PUT("claims/{id}")
+    suspend fun updateClaim(
+        @Path("id") id: Int,
+        @Body claim: Claim
+    ): Claim
 }
