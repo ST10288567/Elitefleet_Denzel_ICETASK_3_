@@ -1,11 +1,8 @@
 Elitefleet_Denzel_ICETASK_3_
 
-
-(No subject)
-Yashodha Govender<yash.gov13@gmail.com>
-
 ​
 Kaedon Naidoo​
+
 Elite Fleet Management
 
 Elite Fleet Management is an Android Studio prototype developed for PROG7311 Part 3 System Development. The application supports dealership operations including vehicle inventory management, appointment booking, claims workflow, reports and administrator profile features.
