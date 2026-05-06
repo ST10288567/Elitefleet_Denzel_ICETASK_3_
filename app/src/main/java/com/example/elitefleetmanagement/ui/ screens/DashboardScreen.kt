@@ -35,7 +35,9 @@ import com.example.elitefleetmanagement.ui.theme.FleetGrey
 import com.example.elitefleetmanagement.ui.theme.FleetTextGrey
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    onInventoryClick: () -> Unit
+) {
     Scaffold(
         bottomBar = {
             NavigationBar {
@@ -132,7 +134,11 @@ fun DashboardScreen() {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            ModuleCard("Vehicle Inventory", "Manage vehicle listings, availability and details.")
+            ModuleCard(
+                title = "Vehicle Inventory",
+                description = "Manage vehicle listings, availability and details.",
+                onClick = onInventoryClick
+            )
             ModuleCard("Appointment Booking", "Book vehicle viewings and assign consultants.")
             ModuleCard("Claims Workflow", "Review customer claims and track claim status.")
             ModuleCard("Reports", "View dealership insights and export summaries.")
@@ -180,9 +186,11 @@ private fun DashboardStatCard(
 @Composable
 private fun ModuleCard(
     title: String,
-    description: String
+    description: String,
+    onClick: () -> Unit = {}
 ) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp),

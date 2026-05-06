@@ -1,11 +1,16 @@
 package com.example.elitefleetmanagement.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.elitefleetmanagement.ui.screens.DashboardScreen
+import com.example.elitefleetmanagement.ui.screens.InventoryScreen
 import com.example.elitefleetmanagement.ui.screens.LoginScreen
+import com.example.elitefleetmanagement.ui.screens.VehicleDetailsScreen
+import com.example.elitefleetmanagement.ui.screens.VehicleFormScreen
 import com.example.elitefleetmanagement.ui.screens.WelcomeScreen
 
 @Composable
@@ -37,7 +42,69 @@ fun AppNavigation() {
         }
 
         composable(Routes.DASHBOARD) {
-            DashboardScreen()
+            DashboardScreen(
+                onInventoryClick = {
+                    navController.navigate(Routes.INVENTORY)
+                }
+            )
+        }
+
+        composable(Routes.INVENTORY) {
+            InventoryScreen(
+                onAddVehicle = {
+                    navController.navigate(Routes.ADD_VEHICLE)
+                },
+                onVehicleClick = { vehicleId ->
+                    navController.navigate("${Routes.VEHICLE_DETAILS}/$vehicleId")
+                }
+            )
+        }
+
+        composable(Routes.ADD_VEHICLE) {
+            VehicleFormScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = "${Routes.VEHICLE_DETAILS}/{vehicleId}",
+            arguments = listOf(
+                navArgument("vehicleId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { entry ->
+            val vehicleId = entry.arguments?.getInt("vehicleId") ?: 0
+
+            VehicleDetailsScreen(
+                vehicleId = vehicleId,
+                onBack = {
+                    navController.popBackStack()
+                },
+                onEdit = { id ->
+                    navController.navigate("${Routes.EDIT_VEHICLE}/$id")
+                }
+            )
+        }
+
+        composable(
+            route = "${Routes.EDIT_VEHICLE}/{vehicleId}",
+            arguments = listOf(
+                navArgument("vehicleId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { entry ->
+            val vehicleId = entry.arguments?.getInt("vehicleId") ?: 0
+
+            VehicleFormScreen(
+                vehicleId = vehicleId,
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

@@ -12,6 +12,22 @@ class FleetRepository(
         return api.getVehicles()
     }
 
+    suspend fun getVehicleById(id: Int): Vehicle {
+        return api.getVehicleById(id)
+    }
+
+    suspend fun addVehicle(vehicle: Vehicle): Vehicle {
+        return api.addVehicle(vehicle)
+    }
+
+    suspend fun updateVehicle(id: Int, vehicle: Vehicle): Vehicle {
+        return api.updateVehicle(id, vehicle)
+    }
+
+    suspend fun deleteVehicle(id: Int) {
+        api.deleteVehicle(id)
+    }
+
     suspend fun getBookings(): List<Booking> {
         return api.getBookings()
     }

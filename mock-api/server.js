@@ -5,7 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const vehicles = [
+let vehicles = [
   {
     id: 1,
     name: "BMW 3 Series",
@@ -19,7 +19,7 @@ const vehicles = [
   {
     id: 2,
     name: "Mercedes-Benz C-Class",
-    brand: "Mercedes",
+    brand: "Mercedes-Benz",
     price: 749999,
     status: "Reserved",
     mileage: 18000,
@@ -35,8 +35,65 @@ const vehicles = [
     mileage: 31000,
     branch: "Phoenix",
     imageUrl: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
+  },
+  {
+    id: 4,
+    name: "Toyota Hilux",
+    brand: "Toyota",
+    price: 589999,
+    status: "Sold",
+    mileage: 42000,
+    branch: "Pinetown",
+    imageUrl: "https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe"
   }
 ];
+
+app.get("/vehicles", (req, res) => {
+  res.json(vehicles);
+});
+
+app.get("/vehicles/:id", (req, res) => {
+  const vehicle = vehicles.find(v => v.id === Number(req.params.id));
+
+  if (!vehicle) {
+    return res.status(404).json({ message: "Vehicle not found" });
+  }
+
+  res.json(vehicle);
+});
+
+app.post("/vehicles", (req, res) => {
+  const newVehicle = {
+    id: vehicles.length + 1,
+    ...req.body
+  };
+
+  vehicles.push(newVehicle);
+  res.status(201).json(newVehicle);
+});
+
+app.put("/vehicles/:id", (req, res) => {
+  const vehicleId = Number(req.params.id);
+  const index = vehicles.findIndex(v => v.id === vehicleId);
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Vehicle not found" });
+  }
+
+  vehicles[index] = {
+    id: vehicleId,
+    ...req.body
+  };
+
+  res.json(vehicles[index]);
+});
+
+app.delete("/vehicles/:id", (req, res) => {
+  const vehicleId = Number(req.params.id);
+  vehicles = vehicles.filter(v => v.id !== vehicleId);
+
+  res.json({ message: "Vehicle deleted successfully" });
+});
 
 const bookings = [
   {
@@ -80,9 +137,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.get("/vehicles", (req, res) => {
-  res.json(vehicles);
-});
+
 
 app.get("/bookings", (req, res) => {
   res.json(bookings);
