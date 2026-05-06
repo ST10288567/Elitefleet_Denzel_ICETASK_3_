@@ -11,6 +11,9 @@ object Routes {
     const val EDIT_VEHICLE = "edit_vehicle"
 
     const val BOOKINGS = "bookings"
+    const val BOOKING_DETAILS = "booking_details"
+    const val ADD_BOOKING = "add_booking"
+
     const val CLAIMS = "claims"
     const val REPORTS = "reports"
     const val PROFILE = "profile"

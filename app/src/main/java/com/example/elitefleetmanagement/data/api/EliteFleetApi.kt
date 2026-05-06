@@ -14,11 +14,13 @@ import retrofit2.http.Path
 
 interface EliteFleetApi {
 
+    // LOGIN
     @POST("login")
     suspend fun login(
         @Body request: LoginRequest
     ): LoginResponse
 
+    // VEHICLES CRUD
     @GET("vehicles")
     suspend fun getVehicles(): List<Vehicle>
 
@@ -43,9 +45,32 @@ interface EliteFleetApi {
         @Path("id") id: Int
     )
 
+    // BOOKINGS CRUD
     @GET("bookings")
     suspend fun getBookings(): List<Booking>
 
+    @GET("bookings/{id}")
+    suspend fun getBookingById(
+        @Path("id") id: Int
+    ): Booking
+
+    @POST("bookings")
+    suspend fun addBooking(
+        @Body booking: Booking
+    ): Booking
+
+    @PUT("bookings/{id}")
+    suspend fun updateBooking(
+        @Path("id") id: Int,
+        @Body booking: Booking
+    ): Booking
+
+    @DELETE("bookings/{id}")
+    suspend fun deleteBooking(
+        @Path("id") id: Int
+    )
+
+    // CLAIMS
     @GET("claims")
     suspend fun getClaims(): List<Claim>
 }

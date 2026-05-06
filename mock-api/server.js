@@ -48,6 +48,61 @@ let vehicles = [
   }
 ];
 
+let bookings = [
+  {
+    id: 1,
+    customerName: "Yash Govender",
+    customerEmail: "yash@email.com",
+    vehicleName: "BMW 3 Series",
+    date: "2026-05-10",
+    time: "10:30",
+    consultant: "A. Naidoo",
+    status: "Confirmed"
+  },
+  {
+    id: 2,
+    customerName: "Riya Pillay",
+    customerEmail: "riya@email.com",
+    vehicleName: "Audi A4",
+    date: "2026-05-12",
+    time: "14:00",
+    consultant: "K. Moodley",
+    status: "Pending"
+  }
+];
+
+const claims = [
+  {
+    id: 1,
+    title: "Vehicle deposit refund",
+    customerName: "R. Pillay",
+    amount: 2500,
+    status: "Pending",
+    date: "2026-05-05"
+  }
+];
+
+// LOGIN
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  if (email && password) {
+    return res.json({
+      success: true,
+      userId: 1,
+      name: "Admin User",
+      role: "Administrator",
+      token: "mock-token-elite-fleet"
+    });
+  }
+
+  res.status(400).json({
+    success: false,
+    message: "Email and password required"
+  });
+});
+
+// VEHICLES CRUD
 app.get("/vehicles", (req, res) => {
   res.json(vehicles);
 });
@@ -95,54 +150,55 @@ app.delete("/vehicles/:id", (req, res) => {
   res.json({ message: "Vehicle deleted successfully" });
 });
 
-const bookings = [
-  {
-    id: 1,
-    customerName: "Yash Govender",
-    vehicleName: "BMW 3 Series",
-    date: "2026-05-10",
-    time: "10:30",
-    consultant: "A. Naidoo",
-    status: "Confirmed"
-  }
-];
-
-const claims = [
-  {
-    id: 1,
-    title: "Vehicle deposit refund",
-    customerName: "R. Pillay",
-    amount: 2500,
-    status: "Pending",
-    date: "2026-05-05"
-  }
-];
-
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  if (email && password) {
-    return res.json({
-      success: true,
-      userId: 1,
-      name: "Admin User",
-      role: "Administrator",
-      token: "mock-token-elite-fleet"
-    });
-  }
-
-  res.status(400).json({
-    success: false,
-    message: "Email and password required"
-  });
-});
-
-
-
+// BOOKINGS CRUD
 app.get("/bookings", (req, res) => {
   res.json(bookings);
 });
 
+app.get("/bookings/:id", (req, res) => {
+  const booking = bookings.find(b => b.id === Number(req.params.id));
+
+  if (!booking) {
+    return res.status(404).json({ message: "Booking not found" });
+  }
+
+  res.json(booking);
+});
+
+app.post("/bookings", (req, res) => {
+  const newBooking = {
+    id: bookings.length + 1,
+    ...req.body
+  };
+
+  bookings.push(newBooking);
+  res.status(201).json(newBooking);
+});
+
+app.put("/bookings/:id", (req, res) => {
+  const bookingId = Number(req.params.id);
+  const index = bookings.findIndex(b => b.id === bookingId);
+
+  if (index === -1) {
+    return res.status(404).json({ message: "Booking not found" });
+  }
+
+  bookings[index] = {
+    id: bookingId,
+    ...req.body
+  };
+
+  res.json(bookings[index]);
+});
+
+app.delete("/bookings/:id", (req, res) => {
+  const bookingId = Number(req.params.id);
+  bookings = bookings.filter(b => b.id !== bookingId);
+
+  res.json({ message: "Booking deleted successfully" });
+});
+
+// CLAIMS
 app.get("/claims", (req, res) => {
   res.json(claims);
 });
